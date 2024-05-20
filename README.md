@@ -65,8 +65,8 @@ You also need to append another 14 structural descriptors to the compositional d
 This information could be extracted from crystallographic information files (CIFs) and inorganic crystal databases. 
 Note: The final training dataset "to_predict_Debye_T.xlsx" will contain 150 descriptors
 
-### Predict relative permittivity
-After preparing `to_predict_Debye_T.xlsx`, you can get the Debye T prediction by:
+### Predict Debye T
+After preparing `to_predict_Debye_T.xlsx`, you can get the debye temperature prediction by:
 
 ```bash
 python Debye_T_model.py
