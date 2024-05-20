@@ -4,10 +4,9 @@ Created on Mon May 20 15:00:41 2024
 
 @author: Amit Kumar, University of Houston
 
-
 """
 
-# Import general python packages and read in the compounds list
+
 import pandas as pd
 import numpy as np
 from pymatgen.core.composition import Composition
@@ -49,32 +48,24 @@ class Vectorize_Formula:
             print(f'There was an error with the Formula: {formula}, Error: {e}')
             return [np.nan] * len(self.element_df.iloc[0]) * 5
 
-# Instantiate the Vectorize_Formula class
 gf = Vectorize_Formula()
 
 composition_df = pd.read_excel('c_pounds.xlsx', sheet_name='Sheet1', usecols="A")
 
 # Ensure the 'Formula' column exists
 
-
-# Empty list for storage of features
 features = []
-
-# Add values to the list using a for loop
 for formula in composition_df['Formula']:
     features.append(gf.get_features(formula))
 
-# Feature vectors as DataFrame
 X = pd.DataFrame(features, columns=gf.column_names)
 
-# Combine composition data with features
 composition = pd.DataFrame(composition_df['Formula'], columns=['Formula'])
 predicted = pd.concat([composition, X], axis=1)
 
-# Export the combined data to an Excel file
 predicted.to_excel('to_predict_Debye_T.xlsx', index=False)
 
-# Read and display the shape of the resulting DataFrame
+
 file_path = 'to_predict_Debye_T.xlsx'
 df = pd.read_excel(file_path)
 
