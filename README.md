@@ -36,7 +36,7 @@ This package requires:
 
 You should create a `.xlsx` file named `c_pounds.xlsx`, in which the compositions that you want to predict are listed in the first column with the header "`Formula`".
 
-There is one [example of customized dataset](/examples) in the repository:`examples/c_pounds.xlsx`.
+There is one [example of customized dataset](/examples) in the repository:c_pounds.xlsx`.
 
 You can get compositional descriptors by:
 
