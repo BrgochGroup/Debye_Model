@@ -9,7 +9,7 @@ Predict Debye Temperature for inorganic materials
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
   - [Define a customized prediction set](#define-a-customized-prediction-set)
-  - [Predict bandgap energy](#predict-bandgap-energy)
+  - [Predict Debye Temperature](#predict-bandgap-energy)
 - [Authors](#authors)
 
 ## Citations
@@ -31,11 +31,8 @@ This package requires:
 
 ## Usage
 
-Note: The centroid shift prediction needs the relative permittivity value as one of the inputs. If you have it ready, you can jump to [Section 2](#2-Centroid-shift-prediction). Or, you can get a predicted relative permittivity value following [Section 1](#1-Relative-permittivity-prediction).
 
-### 1 Relative permittivity prediction
-
-### 1_1 Define a customized prediction set for relative permittivity
+ Define a customized prediction set for relative permittivity
 
 You should create a `.xlsx` file named `c_pounds.xlsx`, in which the compositions that you want to predict are listed in the first column with the header "`Formula`".
 
