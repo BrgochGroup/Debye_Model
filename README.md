@@ -41,7 +41,7 @@ There is one [example of customized dataset](/examples) in the repository:c_poun
 You can get compositional descriptors by:
 
 ```bash
-Descriptor_debye.ipynb
+Descriptor_Debye.ipynb
 ```
 
 `descriptor_generator.py` will automatically read `elements.xlsx` and `c_pounds.xlsx` to generate descriptors. After running, you will get a `.xlsx` file named `to_predict_Debye_T.xlsx`. In this file, the first column is your composition followed by 136 columns of descriptors.
