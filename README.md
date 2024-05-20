@@ -23,7 +23,7 @@ Zhuo, Y., Mansouri Tehrani, A., Oliynyk, A. O., Duke, A. C., & Brgoch, J., Ident
 This package requires:
 
 - [pymatgen](http://pymatgen.org)
-- [XGBoost](https://xgboost.readthedocs.io/en/latest/#)
+- [SVR](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html)
 - [scikit-learn](http://scikit-learn.org/stable/)
 - [pandas](https://pandas.pydata.org/pandas-docs/stable/index.html)
 - [NumPy](https://docs.scipy.org/doc/numpy/index.html)
@@ -41,7 +41,7 @@ There is one [example of customized dataset](/examples) in the repository:c_poun
 You can get compositional descriptors by:
 
 ```bash
-Descriptor_Debye.ipynb
+Descriptor_Debye.py
 ```
 
 `descriptor_generator.py` will automatically read `elements.xlsx` and `c_pounds.xlsx` to generate descriptors. After running, you will get a `.xlsx` file named `to_predict_Debye_T.xlsx`. In this file, the first column is your composition followed by 136 columns of descriptors.
