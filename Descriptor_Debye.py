@@ -5,8 +5,7 @@ Created on Mon May 20 15:00:41 2024
 @author: Amit Kumar, University of Houston
 
 """
-
-
+# To run this code, you need c_ponds.xlsx and elements.xlsx
 import pandas as pd
 import numpy as np
 from pymatgen.core.composition import Composition
