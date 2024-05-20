@@ -44,7 +44,7 @@ You can get compositional descriptors by:
 Descriptor_Debye.py
 ```
 
-`descriptor_generator.py` will automatically read `elements.xlsx` and `c_pounds.xlsx` to generate descriptors. After running, you will get a `.xlsx` file named `to_predict_Debye_T.xlsx`. In this file, the first column is your composition followed by 136 columns of descriptors.
+`Descriptor_Debye.py` will automatically read `elements.xlsx` and `c_pounds.xlsx` to generate descriptors. After running, you will get a `.xlsx` file named `to_predict_Debye_T.xlsx`. In this file, the first column is your composition followed by 136 columns of descriptors.
 
 You also need to append another 14 structural descriptors to the compositional descriptors:
 - Space group number
