@@ -5,7 +5,7 @@ Created on Fri May  20 15:58:52 2024
 @author: Amit Kumar, University of Houston
 
 """
-
+#To run this code you need Debye_T_Training_set.xlsx and to_predict_Debye_T.xlsx
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
