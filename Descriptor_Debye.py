@@ -1,60 +1,82 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri May  8 21:58:52 2020
+Created on Mon May 20 15:00:41 2024
 
-@author: Ya Zhuo, University of Houston
-
-Last modified on May 16 3:43:45 2024
 @author: Amit Kumar, University of Houston
+
+
 """
 
-
-import numpy as np
+# Import general python packages and read in the compounds list
 import pandas as pd
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
+import numpy as np
+from pymatgen.core.composition import Composition
 
-# Load training data
-DE = pd.read_excel('centroid_shift_training_set.xlsx')
-array = DE.values
-X = array[:,2:10]
-Y = array[:,1]
+class Vectorize_Formula:
 
-# Train-test split
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=50, shuffle=True)
+    def __init__(self):
+        # Read the elements data from Excel
+        elem_dict = pd.read_excel(r'elements.xlsx')  # Ensure this file has the correct data
+        self.element_df = pd.DataFrame(elem_dict)
+        self.element_df.set_index('Symbol', inplace=True)
+        self.column_names = []
+        for string in ['avg', 'diff', 'max', 'min']:
+            for column_name in list(self.element_df.columns.values):
+                self.column_names.append(string + '_' + column_name)
 
-# XGB model construction
-xgb_model = xgb.XGBRegressor(
-    max_depth=3, learning_rate=0.15, n_estimators=50, verbosity=1, 
-    objective='reg:squarederror', booster='gbtree', tree_method='auto', 
-    n_jobs=1, gamma=0.0001, min_child_weight=8, max_delta_step=0,
-    subsample=1, colsample_bytree=1, colsample_bylevel=0.9, colsample_bynode=1, 
-    reg_alpha=0, reg_lambda=4, scale_pos_weight=1, base_score=0.6, 
-    random_state=15, missing=np.nan, # Handling NaN as missing values
-    num_parallel_tree=1, importance_type='gain', eval_metric='rmse', nthread=4
-)
+    def get_features(self, formula):
+        try:
+            fractional_composition = Composition(formula).fractional_composition.as_dict()
+            element_composition = Composition(formula).element_composition.as_dict()
+            avg_feature = np.zeros(len(self.element_df.iloc[0]))
+            diff_feature = np.zeros(len(self.element_df.iloc[0]))
+            
+            for key in fractional_composition:
+                try:
+                    avg_feature += self.element_df.loc[key].values * fractional_composition[key]
+                    diff_feature = self.element_df.loc[list(fractional_composition.keys())].max() - self.element_df.loc[list(fractional_composition.keys())].min()
+                except Exception as e:
+                    print(f'The element: {key}, Formula: {formula}, Error: {e}')
+                    return np.array([np.nan] * len(self.element_df.iloc[0]) * 5)
 
-# Fit model
-xgb_model.fit(X_train, Y_train)
+            max_feature = self.element_df.loc[list(fractional_composition.keys())].max()
+            min_feature = self.element_df.loc[list(fractional_composition.keys())].min()
+           
 
-# Load prediction data
-prediction = pd.read_excel('to_predict_centroid_shift.xlsx')
-b = prediction.values[:,1:9]  # Assuming b should start from the 2nd column to the 9th column
+            features = np.concatenate([avg_feature, diff_feature, np.array(max_feature), np.array(min_feature)])
+            return features.transpose()
+        except Exception as e:
+            print(f'There was an error with the Formula: {formula}, Error: {e}')
+            return [np.nan] * len(self.element_df.iloc[0]) * 5
 
-# Handle missing values
-# Replace None or other non-numeric values with np.nan
-b = np.where(pd.isnull(b), np.nan, b)
+# Instantiate the Vectorize_Formula class
+gf = Vectorize_Formula()
 
-# Prediction
-result = xgb_model.predict(b)
+composition_df = pd.read_excel('c_pounds.xlsx', sheet_name='Sheet1', usecols="A")
 
-# Load compositions
-composition = pd.read_excel('to_predict_centroid_shift.xlsx', usecols="A")
-composition = pd.DataFrame(composition, columns=["Composition"])
+# Ensure the 'Formula' column exists
 
-# Combine results
-result = pd.DataFrame(result, columns=["Predicted centroid shift"])
-predicted = pd.concat([composition, result], axis=1)
-predicted.to_excel('predicted_centroid_shift.xlsx', index=False)
 
-print("A file named predicted_centroid_shift.xlsx has been generated. Please check your folder.")
+# Empty list for storage of features
+features = []
+
+# Add values to the list using a for loop
+for formula in composition_df['Formula']:
+    features.append(gf.get_features(formula))
+
+# Feature vectors as DataFrame
+X = pd.DataFrame(features, columns=gf.column_names)
+
+# Combine composition data with features
+composition = pd.DataFrame(composition_df['Formula'], columns=['Formula'])
+predicted = pd.concat([composition, X], axis=1)
+
+# Export the combined data to an Excel file
+predicted.to_excel('to_predict_Debye_T.xlsx', index=False)
+
+# Read and display the shape of the resulting DataFrame
+file_path = 'to_predict_Debye_T.xlsx'
+df = pd.read_excel(file_path)
+
+# Display the shape of the DataFrame
+print(df.shape)
